@@ -1,0 +1,85 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" href="{% static 'style.css' %}" />
+<link rel="stylesheet" href="{% static 'customer-style.css' %}" />
+
+<div class="customer_view_header">
+<div class="customer_view_logo"></div>
+<div class="customer_view_title"><h1>{{ customer.name }}'s Dashboard</h1></div>
+</div>
+
+{% if customer.status == 2 %}
+	SSID: {{ customer.ssid }}
+	<BR>
+	Portal URL: {{ customer.portal_url }}
+	<BR>
+	AAA: {{ customer.aaa_ip }}
+	<BR>
+	AAA Secret: {{ customer.aaa_secret }}
+	<BR>
+	Staus: {{ customer.status }}
+	<BR>
+	Assigned WLC: {{ customer.wlc }}
+	<TABLE>
+	{% for ap in customer_aps %}
+		<TR>
+		{% if ap.status == 0 %}
+		<FORM method=POST action='{% url "order:ap_update" customer.pk ap.pk %}'>
+		{% csrf_token %}
+		<TD>
+		<INPUT type=hidden name=ap_id value='{{ ap.pk }}'>
+		<INPUT type=text name='ap_mac' value='{{ ap.mac }}'>
+		</TD>
+		<TD bgcolor=#ff0000 width=10px></TD>
+		<TD><INPUT type=submit value="Add MAC"></TD>
+		</FORM>
+		{% elif ap.status == 1 %}
+		<FORM method=POST action='{% url "order:ap_clear" customer.pk ap.pk %}'>
+		{% csrf_token %}
+		<TD>
+		{{ ap.mac }}
+		</TD>
+		<TD bgcolor=#ff8800 width=10px></TD>
+		<TD>
+		<INPUT type=hidden name=ap_id value='{{ ap.pk }}'>
+		<INPUT type=submit value="Clear MAC">
+		</TD>
+		</FORM>
+		{% elif ap.status == 2 %}
+		<FORM method=POST action='{% url "order:ap_clear" customer.pk ap.pk %}'>
+		{% csrf_token %}
+		<TD>
+		{{ ap.mac }}
+		</TD>
+		<TD bgcolor=#ffff00 width=10px></TD>
+		<TD>
+		<INPUT type=hidden name=ap_id value='{{ ap.pk }}'>
+		<INPUT type=submit value="Clear MAC">
+		</TD>
+		</FORM>
+		<FORM method=POST action='{% url "order:ap_deploy" customer.pk ap.pk %}'>
+		{% csrf_token %}
+		<TD>
+		<INPUT type=hidden name=ap_id value='{{ ap.pk }}'>
+		<INPUT type=submit value="Deploy">
+		</TD>
+		</FORM>
+		{% elif ap.status == 3 %}
+		<FORM method=POST action='{% url "order:ap_clear" customer.pk ap.pk %}'>
+		{% csrf_token %}
+		<TD>
+		{{ ap.mac }}
+		</TD>
+		<TD bgcolor=#00ff00 width=10px></TD>
+		<TD>
+		<INPUT type=hidden name=ap_id value='{{ ap.pk }}'>
+		<INPUT type=submit value="Clear MAC">
+		</TD>
+		</FORM>
+		{% endif %}
+		</TR>
+	{% endfor %}
+	</TABLE>
+{% else %}
+    Deployment in process
+{% endif %}

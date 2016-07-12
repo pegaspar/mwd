@@ -1,0 +1,88 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" href="{% static 'style.css' %}" />
+<link rel="stylesheet" href="{% static 'admin-style.css' %}" />
+
+<div class="admin_header">
+<div class="admin_logo">
+</div>
+<div class="admin_title"><h1>Managed WiFi Admin Dashboard</h1></div>
+</div>
+<div class="admin_top"></div>
+
+<TABLE class="admintable" border=1px>
+<TR><TH>Customer</TH><TH>Status</TH><TH>SSID</TH><TH>WLC</TH><!--<TH>Portal URL</TH>--><TH>AAA Server</TH><TH>GlobalReach Credentials</TH><TH>Prime Infrastructure Credentials</TH>
+<TH></TH><TH></TH><TH></TH></TR>
+{% for customer in customers %}
+<TR>
+<FORM method=POST action='{% url "order:admin_customer_update" customer.pk %}'>
+{% csrf_token %}
+<TD class="customer_name_td">
+<TABLE class='sub_table' width="100%">
+<TR><TD class='sub_table_input'>{{ customer.name }}</TD></TR>
+<TR><TD class='sub_table_input'>E-Mail: {{ customer.email }}</TD></TR>
+</TABLE>
+</TD>
+<TD class="customer_status_td_{{ customer.status }}"><div class="customer_status_value">{{ customer.status }}</div></TD>
+<TD>{{ customer.ssid }}</TD>
+<TD>
+{% if customer.status < 2 %}
+	<SELECT name="wlc">
+		{% for wlc in customer.wlc_list %}
+			<OPTION value='{{ wlc.ip }}' 
+			{% if wlc.selected == "1" %}
+				selected
+			{% endif %}
+			>{{ wlc.name }}</OPTION>
+ 		{% endfor %}
+	</SELECT>
+{% else %}
+	{% for wlc in customer.wlc_list %}
+		{% if wlc.ip == customer.wlc %}
+			{{ wlc.name }}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+</TD>
+<!--<TD><INPUT name='portal_url' type=text value='{{ customer.portal_url }}'></TD>-->
+<TD>
+<TABLE class='sub_table'>
+<TR><TD class='sub_table_label'>Index:</TD><TD class='sub_table_input'><INPUT name='aaa_ip' type=text value='{{ customer.aaa_ip }}'></TD></TR>
+<!-- <TR><TD class='sub_table_label'>Port:</TD><TD class='sub_table_input'><INPUT name='aaa_port' type=text value='{{ customer.aaa_port }}'></TD></TR>
+<TR><TD class='sub_table_label'>Secret:</TD><TD class='sub_table_input'><INPUT name='aaa_secret' type=text value='{{ customer.aaa_secret }}'></TD></TR>
+-->
+</TABLE>
+</TD>
+<TD>
+<TABLE class='sub_table'>
+<TR><TD class='sub_table_label'>Username:</TD><TD class='sub_table_input'><INPUT name='gr_user' type=text value='{{ customer.gr_user }}'></TD></TR>
+<TR><TD class='sub_table_label'>Password:</TD><TD class='sub_table_input'><INPUT name='gr_password' type=text value='{{ customer.gr_password }}'></TD></TR>
+<TR><TD class='sub_table_label'>CustomerID:</TD><TD class='sub_table_input'><INPUT name='gr_customer' type=text value='{{ customer.gr_customer }}'></TD></TR>
+</TABLE>
+</TD>
+<TD>
+<TABLE class='sub_table'>
+<TR><TD class='sub_table_label'>Username:</TD><TD class='sub_table_input'><INPUT name='pi_user' type=text value='{{ customer.pi_user }}'></TD></TR>
+<TR><TD class='sub_table_label'>Password:</TD><TD class='sub_table_input'><INPUT name='pi_password' type=text value='{{ customer.pi_password }}'></TD></TR>
+</TABLE>
+</TD>
+<TD>
+{% if customer.status < 2 %}
+<INPUT name='update' type=submit value="Update"></TD>
+{% endif %}
+{% if customer.status = 0 %}
+<TD></TD>
+{% endif %}
+{% if customer.status = 1 %}
+<TD><INPUT name='deploy' type=submit value="Deploy"></TD>
+{% endif %}
+{% if customer.status = 2 %}
+<TD><INPUT name='undeploy' type=submit value="Un-Deploy"></TD><TD></TD>
+{% endif %}
+{% if customer.status < 2 %}
+<TD><INPUT name='delete' type=submit value="Delete"></TD>
+{% endif %}
+</FORM>
+</TR>
+{% endfor %}
+</TABLE>

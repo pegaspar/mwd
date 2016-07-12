@@ -1,0 +1,50 @@
+@import url(https://fonts.googleapis.com/css?family=Anaheim);
+
+body {
+	font-family: "Anaheim";
+}
+
+input[type='submit'] {
+	background: white;
+	border: 0px;
+	height: 30px;
+	width: 100px;
+	vertical-align:middle;
+	display:inherit;
+}
+
+input[type='submit']:hover {
+	background: grey;
+}
+
+table {
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+	background: #eeeeee;
+}
+
+table th {
+	border: 0px;
+	margin: 0px;
+	padding: 10px;
+	background: #bbbbbb;
+}
+
+table td,tr {
+	border: 0px;
+	margin: 0px;
+	padding: 10px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+table tr {
+	border: 0px;
+	margin: 0px;
+	padding: 10px;
+}
+
+ul.messages {
+	color: #ff0000;
+}

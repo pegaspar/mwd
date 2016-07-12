@@ -1,0 +1,36 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" href="{% static 'style.css' %}" />
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class="new_customer_form">
+<form action="{% url 'order:new' %}" method="post">
+
+{% csrf_token %}
+
+Customer name: <INPUT type=text name="customer_name"></INPUT><BR>
+Email: <INPUT type=text name="customer_email"></INPUT><BR>
+
+Number of APs: <INPUT type=number name="customer_aps" value=0></INPUT><BR>
+SSID: <INPUT type=text name="customer_ssid"></INPUT><BR>
+
+<INPUT value="Order" type=submit></INPUT>
+</form>
+</div>
+
+<div class="login_form">
+<form action="{% url 'order:login' %}" method="post">
+{% csrf_token %}
+
+Email: <INPUT type=text name="customer_email"></INPUT><BR>
+<INPUT value="Login" type=submit></INPUT>
+</form>
+</div>
+
