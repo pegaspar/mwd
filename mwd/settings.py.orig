@@ -121,12 +121,17 @@ USE_TZ = True
 STATIC_ROOT =os.path.join(BASE_DIR, '/order/static')
 STATIC_URL = '/mwd/static/'
 
+
+# Fill in the parameters relevant for your installation
+
+# Email settings
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'user'
 EMAIL_HOST_PASSWORD = 'password'
 EMAIL_USE_TLS = True
 
+# Prime Infra settings
 PIADDR = "10.0.0.1"
 PIUSER = "root"
 PIPASS = "password"
