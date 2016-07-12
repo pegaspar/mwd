@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import include,url
 from django.contrib import admin
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
+	url(r'^$', RedirectView.as_view(url='/mwd/order/new', permanent=False), name='index'),
 	url(r'^order/', include('order.urls', namespace="order")),
     url(r'^admin/', admin.site.urls)
 ]
