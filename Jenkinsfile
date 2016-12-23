@@ -1,5 +1,5 @@
 node {
-    stage('checkout scm'} {
+    stage('checkout scm') {
         checkout scm;
     }
     stage('build') {
